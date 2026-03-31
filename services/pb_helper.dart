@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:pocketbase/pocketbase.dart';
 
+import '../env.dart';
 import '../models/organization.dart';
 import '../models/visit.dart';
 
@@ -13,7 +12,7 @@ class PbHelper {
   final String pbDataUrl;
 
   //TODO:
-  static final instance = PocketBase(Platform.environment['BASE_PB_URL'] ?? '');
+  static final instance = PocketBase(Env.PB_URL);
 
   late final dataInstance = PocketBase(pbDataUrl);
 

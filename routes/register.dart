@@ -7,11 +7,9 @@ import '../models/job.dart';
 import '../models/org_visit_info.dart';
 import '../services/pb_helper.dart';
 import '../services/scheduler.dart';
+import '../services/wa_service.dart';
 
 Future<Response> onRequest(RequestContext context) async {
-  // if (context.request.method == HttpMethod.options) {
-  //   return _handleOptions(context);
-  // }
   // ignore: avoid_print
   print('''
 [TIME] : ${DateTime.now()}
@@ -31,6 +29,7 @@ Future<Response> onRequest(RequestContext context) async {
 }
 
 Future<Response> _handlePostRequest(RequestContext context) async {
+  const uuid = UuidV4();
   try {
     // parse body to visitData (visit_id, org_id, create / update)
     final orgVisitInfo = OrgVisitInfo.fromJson(
@@ -46,11 +45,18 @@ Future<Response> _handlePostRequest(RequestContext context) async {
 
     //if update =>
 
-    //cron the whatsapp message to be 10 am localtime/cairotime
     final _job = Job(
-      id: _visit.id,
+      id: uuid.generate(),
       callback: () async {
-        //TODO:
+        //schedule the whatsapp message to be 3 hours before visit time
+        await WaService(
+          phone: '2${_visit.patient.phone}',
+          message: switch (orgVisitInfo.type) {
+            NotificationType.create => _visit.toWaNewVisit(),
+            NotificationType.update => _visit.toWaUpdateVisit(),
+            NotificationType.invalid => '',
+          },
+        ).sendTextMessage();
       },
       exec: _visit.visit_date.subtract(
         const Duration(hours: 3),
@@ -60,7 +66,10 @@ Future<Response> _handlePostRequest(RequestContext context) async {
     // return response to client
 
     return Response.json(
-      body: {'message': 'success'},
+      body: {
+        'code': 000,
+        'message': 'success',
+      },
     );
     // ignore: unused_catch_stack
   } catch (e, s) {

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 import 'package:pocketbase/pocketbase.dart';
 
 import '../extensions/datetime_ext.dart';
@@ -216,5 +217,25 @@ class VisitExpanded extends Visit {
         record.get<RecordModel>('expand.doc_id').toJson(),
       ),
     );
+  }
+
+  String toWaNewVisit() {
+    return '''
+نظام التذكير الالكتروني لبروكلينيك
+نود تذكيركم بموعد اليوم مع دكتور / ${doctor.name_ar}
+بعيادة / ${clinic.name_ar}
+من الساعة ${DateFormat.jm('ar').format(DateTime(visit_date.year).copyWith(hour: visit_date.hour, minute: visit_date.minute))}
+مع تمنياتنا بالشفاء العاجل
+ ''';
+  }
+
+  String toWaUpdateVisit() {
+    return '''
+نظام التذكير الالكتروني لبروكلينيك
+تم تعديل موعد اليوم مع دكتور / ${doctor.name_ar}
+بعيادة / ${clinic.name_ar}
+ليكون الساعة ${DateFormat.jm('ar').format(DateTime(visit_date.year).copyWith(hour: visit_date.hour, minute: visit_date.minute))}
+مع تمنياتنا بالشفاء العاجل
+ ''';
   }
 }

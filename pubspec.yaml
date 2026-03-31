@@ -10,6 +10,7 @@ dependencies:
   dart_frog: ^1.1.0
   equatable: ^2.0.8
   http: ^1.6.0
+  intl: ^0.20.2
   pocketbase: ^0.23.2
   shelf_cors_headers: ^0.1.5
   uuid: ^4.5.2

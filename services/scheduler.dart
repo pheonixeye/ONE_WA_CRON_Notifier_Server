@@ -17,7 +17,9 @@ class Scheduler {
   static final List<Job> _jobs = [];
 
   void register(Job job) {
+    print('called register(${job.id})');
     _jobs.add(job);
+    print('jobs.length(${_jobs.length})');
   }
 
   static DateTime get secondlessNow => DateTime(
@@ -35,12 +37,13 @@ class Scheduler {
     Timer.periodic(_duration, (_) {
       for (var i = 0; i < _jobs.length; i++) {
         final job = _jobs[i];
+        print('called _exec(${job.id})');
 
         if (job.exec.isAtSameMomentAs(secondlessNow)) {
           job.callback();
         }
         if (job.exec.isAfter(secondlessNow)) {
-          _jobs.removeWhere((e) => e.id == job.id);
+          _jobs.removeAt(i);
         }
       }
     });
