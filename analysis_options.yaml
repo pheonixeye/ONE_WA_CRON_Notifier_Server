@@ -1,0 +1,6 @@
+analyzer:
+  errors:
+    no_leading_underscores_for_local_identifiers: ignore
+    non_constant_identifier_names: ignore
+    sort_constructors_first: ignore
+include: package:dart_frog_lint/recommended.yaml
