@@ -1,51 +1,57 @@
 import 'dart:async';
 
+import 'package:timezone/timezone.dart' as tz;
+
 import '../models/job.dart';
 
-final _now = DateTime.now();
-const _duration = Duration(seconds: 5);
-
 class Scheduler {
-  Scheduler() {
-    if (_execStarted) {
-      return;
-    } else {
-      _exec();
-    }
+  //TODO: needs to be reimplemented
+
+  // A sorted list acting as a simple Min-Heap (earliest task first)
+  final List<Job> _taskQueue = [];
+  Timer? _timer;
+
+  void _resetTimer() {
+    // If the timer is already running, stop it to recalculate
+    // based on the new "earliest" task in the queue.
+    _timer?.cancel();
+
+    if (_taskQueue.isEmpty) return;
+
+    final nextTask = _taskQueue.first;
+    final now = DateTime.now();
+    final delay = nextTask.exec.difference(now);
+
+    // If the time has already passed, execute immediately (0 delay)
+    _timer = Timer(delay.isNegative ? Duration.zero : delay, _executeNext);
   }
 
-  static final List<Job> _jobs = [];
+  void _executeNext() {
+    if (_taskQueue.isEmpty) return;
 
-  void register(Job job) {
-    print('called register(${job.id})');
-    _jobs.add(job);
-    print('jobs.length(${_jobs.length})');
+    final task = _taskQueue.removeAt(0);
+
+    // Execute the action asynchronously so it doesn't block the scheduler
+    Future.microtask(task.callback);
+
+    _resetTimer();
   }
 
-  static DateTime get secondlessNow => DateTime(
-        _now.year,
-        _now.month,
-        _now.day,
-        _now.hour,
-        _now.minute,
-      );
+  void schedule(Job task) {
+    final nextRun = task.getNextOccurrence();
 
-  static bool _execStarted = false;
+    // Convert the localized 'nextRun' to a simple Duration from 'now'
+    final now = tz.TZDateTime.now(tz.getLocation(task.locationName));
+    final delay = nextRun.difference(now);
 
-  static void _exec() {
-    _execStarted = true;
-    Timer.periodic(_duration, (_) {
-      for (var i = 0; i < _jobs.length; i++) {
-        final job = _jobs[i];
-        print('called _exec(${job.id})');
+    // print(
+    // ignore: lines_longer_than_80_chars
+    //     "Scheduling ${task.id} for $nextRun (In ${delay.inHours}h ${delay.inMinutes % 60}m)");
 
-        if (job.exec.isAtSameMomentAs(secondlessNow)) {
-          job.callback();
-        }
-        if (job.exec.isAfter(secondlessNow)) {
-          _jobs.removeAt(i);
-        }
-      }
+    _timer = Timer(delay, () {
+      task.callback();
+      // For a daily recurring task, simply reschedule
+      schedule(task);
     });
   }
 }

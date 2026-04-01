@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
-import 'package:uuid/v4.dart';
+// import 'package:uuid/v4.dart';
 
-import '../models/job.dart';
+// import '../models/job.dart';
 import '../models/org_visit_info.dart';
 import '../services/pb_helper.dart';
-import '../services/scheduler.dart';
+// import '../services/scheduler.dart';
 import '../services/wa_service.dart';
 
 Future<Response> onRequest(RequestContext context) async {
@@ -29,7 +29,7 @@ Future<Response> onRequest(RequestContext context) async {
 }
 
 Future<Response> _handlePostRequest(RequestContext context) async {
-  const uuid = UuidV4();
+  // const uuid = UuidV4();
   try {
     // parse body to visitData (visit_id, org_id, create / update)
     final orgVisitInfo = OrgVisitInfo.fromJson(
@@ -42,27 +42,35 @@ Future<Response> _handlePostRequest(RequestContext context) async {
     final _visit = await PbHelper(pbDataUrl: _org.pb_endpoint)
         .fetchVisit(orgVisitInfo.visit_id);
     //if create =>
-
+    await WaService(
+      phone: '2${_visit.patient.phone}',
+      message: switch (orgVisitInfo.type) {
+        NotificationType.create => _visit.toWaNewVisitInstant(),
+        NotificationType.update => _visit.toWaUpdateVisitInstant(),
+        NotificationType.invalid => '',
+      },
+    ).sendTextMessage();
     //if update =>
 
-    final _job = Job(
-      id: uuid.generate(),
-      callback: () async {
-        //schedule the whatsapp message to be 3 hours before visit time
-        await WaService(
-          phone: '2${_visit.patient.phone}',
-          message: switch (orgVisitInfo.type) {
-            NotificationType.create => _visit.toWaNewVisit(),
-            NotificationType.update => _visit.toWaUpdateVisit(),
-            NotificationType.invalid => '',
-          },
-        ).sendTextMessage();
-      },
-      exec: _visit.visit_date.subtract(
-        const Duration(hours: 3),
-      ),
-    );
-    Scheduler().register(_job);
+    // final _job = Job(
+    //   locationName: 'Africa/Cairo',
+    //   id: uuid.generate(),
+    //   callback: () {
+    //     //schedule the whatsapp message to be 3 hours before visit time
+    //     WaService(
+    //       phone: '2${_visit.patient.phone}',
+    //       message: switch (orgVisitInfo.type) {
+    //         NotificationType.create => _visit.toWaNewVisit(),
+    //         NotificationType.update => _visit.toWaUpdateVisit(),
+    //         NotificationType.invalid => '',
+    //       },
+    //     ).sendTextMessage();
+    //   },
+    //   exec: _visit.visit_date.subtract(
+    //     const Duration(hours: 3),
+    //   ),
+    // );
+    // Scheduler().schedule(_job);
     // return response to client
 
     return Response.json(

@@ -1,5 +1,6 @@
 analyzer:
   errors:
+    flutter_style_todos: ignore
     no_leading_underscores_for_local_identifiers: ignore
     non_constant_identifier_names: ignore
     sort_constructors_first: ignore

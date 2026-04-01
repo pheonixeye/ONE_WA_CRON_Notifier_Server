@@ -219,12 +219,36 @@ class VisitExpanded extends Visit {
     );
   }
 
+  String toWaNewVisitInstant() {
+    return '''
+نظام التذكير الالكتروني لبروكلينيك
+تم حجز موعد مع دكتور / ${doctor.name_ar}
+بعيادة / ${clinic.name_ar}
+بتاريخ ${DateFormat('dd-MM-yyyy', 'ar').format(visit_date)}
+من الساعة ${DateFormat.jm('ar').format(DateTime(visit_date.year).copyWith(hour: visit_date.hour, minute: visit_date.minute))}
+رقم تواصل العيادة : ${clinic.phone_number}
+مع تمنياتنا بالشفاء العاجل
+ ''';
+  }
+
   String toWaNewVisit() {
     return '''
 نظام التذكير الالكتروني لبروكلينيك
 نود تذكيركم بموعد اليوم مع دكتور / ${doctor.name_ar}
 بعيادة / ${clinic.name_ar}
 من الساعة ${DateFormat.jm('ar').format(DateTime(visit_date.year).copyWith(hour: visit_date.hour, minute: visit_date.minute))}
+مع تمنياتنا بالشفاء العاجل
+ ''';
+  }
+
+  String toWaUpdateVisitInstant() {
+    return '''
+نظام التذكير الالكتروني لبروكلينيك
+تم تعديل موعد الحجز مع دكتور / ${doctor.name_ar}
+بعيادة / ${clinic.name_ar}
+بتاريخ ${DateFormat('dd-MM-yyyy', 'ar').format(visit_date)}
+ليكون الساعة ${DateFormat.jm('ar').format(DateTime(visit_date.year).copyWith(hour: visit_date.hour, minute: visit_date.minute))}
+رقم تواصل العيادة : ${clinic.phone_number}
 مع تمنياتنا بالشفاء العاجل
  ''';
   }

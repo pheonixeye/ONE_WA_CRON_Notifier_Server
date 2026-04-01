@@ -11,7 +11,6 @@ class PbHelper {
 
   final String pbDataUrl;
 
-  //TODO:
   static final instance = PocketBase(Env.PB_URL);
 
   late final dataInstance = PocketBase(pbDataUrl);

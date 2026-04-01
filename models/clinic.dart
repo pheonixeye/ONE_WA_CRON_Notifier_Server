@@ -70,7 +70,7 @@ class Clinic implements Equatable {
       'id': id,
       'name_en': name_en,
       'name_ar': name_ar,
-      'doc_id': doc_id.map((e) => e.toString()).toList(),
+      'doc_id': doc_id.map((e) => e).toList(),
       'phone_number': phone_number,
       'consultation_fees': consultation_fees,
       'followup_fees': followup_fees,

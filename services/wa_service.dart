@@ -19,7 +19,7 @@ class WaService {
     final _response = await http.post(
       Uri.parse(uri),
       headers: {
-        'Authorization': Env.WA_ADMIN_TOKEN,
+        'Token': Env.WA_ADMIN_TOKEN,
         'Content-Type': 'application/json',
       },
       body: jsonEncode({
@@ -29,12 +29,12 @@ class WaService {
     );
 
     final _result = jsonDecode(_response.body) as Map<String, dynamic>;
+    // print(_result);
 
     if (_result['code'] == 200) {
-      print(_result);
       return true;
     } else {
-      print(_result['data']);
+      // print(_result['data']);
       return false;
     }
   }
