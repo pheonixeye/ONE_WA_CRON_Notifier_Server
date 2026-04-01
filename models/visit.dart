@@ -225,7 +225,7 @@ class VisitExpanded extends Visit {
 تم حجز موعد مع دكتور / ${doctor.name_ar}
 بعيادة / ${clinic.name_ar}
 بتاريخ ${DateFormat('dd-MM-yyyy', 'ar').format(visit_date)}
-من الساعة ${DateFormat.jm('ar').format(DateTime(visit_date.year).copyWith(hour: visit_date.hour, minute: visit_date.minute))}
+من الساعة ${DateFormat.jmv('ar').format(DateTime(visit_date.year).copyWith(hour: s_h.toInt(), minute: s_m.toInt()))}
 رقم تواصل العيادة : ${clinic.phone_number}
 مع تمنياتنا بالشفاء العاجل
  ''';
@@ -236,7 +236,7 @@ class VisitExpanded extends Visit {
 نظام التذكير الالكتروني لبروكلينيك
 نود تذكيركم بموعد اليوم مع دكتور / ${doctor.name_ar}
 بعيادة / ${clinic.name_ar}
-من الساعة ${DateFormat.jm('ar').format(DateTime(visit_date.year).copyWith(hour: visit_date.hour, minute: visit_date.minute))}
+من الساعة ${DateFormat.jmv('ar').format(DateTime(visit_date.year).copyWith(hour: s_h.toInt(), minute: s_m.toInt()))}
 مع تمنياتنا بالشفاء العاجل
  ''';
   }
@@ -247,7 +247,7 @@ class VisitExpanded extends Visit {
 تم تعديل موعد الحجز مع دكتور / ${doctor.name_ar}
 بعيادة / ${clinic.name_ar}
 بتاريخ ${DateFormat('dd-MM-yyyy', 'ar').format(visit_date)}
-ليكون الساعة ${DateFormat.jm('ar').format(DateTime(visit_date.year).copyWith(hour: visit_date.hour, minute: visit_date.minute))}
+ليكون الساعة ${DateFormat.jm('ar').format(DateTime(visit_date.year).copyWith(hour: s_h.toInt(), minute: s_m.toInt()))}
 رقم تواصل العيادة : ${clinic.phone_number}
 مع تمنياتنا بالشفاء العاجل
  ''';
@@ -258,7 +258,7 @@ class VisitExpanded extends Visit {
 نظام التذكير الالكتروني لبروكلينيك
 تم تعديل موعد اليوم مع دكتور / ${doctor.name_ar}
 بعيادة / ${clinic.name_ar}
-ليكون الساعة ${DateFormat.jm('ar').format(DateTime(visit_date.year).copyWith(hour: visit_date.hour, minute: visit_date.minute))}
+ليكون الساعة ${DateFormat.jm('ar').format(DateTime(visit_date.year).copyWith(hour: s_h.toInt(), minute: s_m.toInt()))}
 مع تمنياتنا بالشفاء العاجل
  ''';
   }
