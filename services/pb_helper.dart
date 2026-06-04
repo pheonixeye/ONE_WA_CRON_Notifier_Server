@@ -11,12 +11,12 @@ class PbHelper {
 
   final String pbDataUrl;
 
-  static final instance = PocketBase(Env.PB_URL);
+  static final baseInstance = PocketBase(Env.PB_URL);
 
   late final dataInstance = PocketBase(pbDataUrl);
 
   Future<OrganizationExpanded> fetchOrganization(String org_id) async {
-    final _result = await instance.collection('organizations').getOne(
+    final _result = await baseInstance.collection('organizations').getOne(
           org_id,
           expand: 'members',
         );

@@ -2,18 +2,19 @@
 import 'package:equatable/equatable.dart';
 import 'package:timezone/timezone.dart' as tz;
 
+import '../main.dart' show uuid;
+
 class Job extends Equatable {
   final String id;
   final void Function() callback;
   final DateTime exec;
   final String locationName; // e.g., 'America/New_York'
 
-  const Job({
-    required this.id,
+  Job({
     required this.callback,
     required this.exec,
-    required this.locationName,
-  });
+    this.locationName = 'Africa/Cairo',
+  }) : id = uuid.generate();
 
   @override
   List<Object> get props => [
